@@ -10,20 +10,37 @@ class Guerreiro:
 
     def status(self):
         print(f"\nAtributos do guerreiro {self.nome}:\n Vida: {self.vida}\n Ataque: {self.ataque} \n Defesa: {self.defesa}")
+
     #função de ataque ao outro jogador
     def atacar(gue1,gue2):
-        print(f"\n{gue1.nome}, atacou a defesa da {gue2.nome} ")
-        print(f"{gue1.nome} = Ataque: {gue1.ataque} | {gue2.nome} = defesa: {gue2.defesa} ")
-        gue2.defesa =  gue2.defesa - gue1.ataque # defesa - ataque
-        print(f"O novo valor de defesa da {gue2.nome} agora é de {gue2.defesa}")
-        if gue2.defesa < 0:
-            gue2.vida =  gue2.vida + gue2.defesa # vida.200 - def.-1 = vida.199
-            print(f"\nA defesa da {gue2.nome} foi COMPLETAMENTE DESTRUIDA. \nDano a mais causado a defesa, transfirida para sua vida. \nvida atual: {gue2.vida} ")
-            gue2.defesa = 0
+        print(f"\n{gue1.nome}, atacou {gue2.nome} ")
+            
+            #se a defesa do outro jogador ainda existir:
+        if gue2.defesa > 0:
+            print(f"{gue1.nome} = Ataque: {gue1.ataque} | {gue2.nome} = defesa: {gue2.defesa} ")
+            gue2.defesa =  gue2.defesa - gue1.ataque # defesa - ataque
+            print(f"O novo valor de defesa da {gue2.nome} agora é de {gue2.defesa}")
+            if gue2.defesa < 0:
+                gue2.vida =  gue2.vida + gue2.defesa # vida.200 - def.-1 = vida.199
+                print(f"\nA defesa de {gue2.nome} foi COMPLETAMENTE DESTRUIDA. \nDano a mais causado a defesa, transfirida para sua vida. \nvida atual: {gue2.vida} ")
+                gue2.defesa = 0
+                if gue2.vida <= 0:
+                    print(f" {gue2.nome} virou Pó... \n     FIM DE JOGO.")
+
+            #se a defesa ja se foi, e a vida ainda é maior que 0    
+        elif gue2.defesa <= 0 and gue2.vida > 0:
+            print(f"A defesa de {gue2.nome} se foi... agora ele usara sua vida como ultima defesa \n")
+            print(f"{gue1.nome} = Ataque: {gue1.ataque} | {gue2.nome} = vida: {gue2.vida} ")
+            gue2.vida =  gue2.vida - gue1.ataque # defesa - ataque
+            print(f"O novo valor de vida de {gue2.nome} agora é de {gue2.vida}")
+            if gue2.vida <= 0:
+                print(f" {gue2.nome} virou Pó... \n     FIM DE JOGO.")   
+
     def aumentarxp(gue):
         print(f"A vida do jogador {gue.nome} é de: {gue.vida}.")
         gue.vida += (gue.vida / 100) * 25
         print(f"Com o aumento de 25% sua vida agora é de: {gue.vida}. ")
+
     #heroi1
 print("Digite os atributos do Heroi 1:")
 nome1 = input("Nome: ")
@@ -41,20 +58,22 @@ defesa2 = int(input("Defesa: "))
 #Criando um objeto da classe criada e passando atributos
 heroi1 = Guerreiro(nome1, vida1, ataque1, defesa1 )
 heroi2 = Guerreiro(nome2, vida2, ataque2,defesa2  )
-heroi1.aumentarxp()
-heroi2.aumentarxp()
+
 
 #mostrando atributos
-heroi1.status()
-heroi2.status()
+#heroi1.status()
+#heroi2.status()
 
 #fazendo ataque
 #heroi1.atacar(heroi2)
 #heroi2.status()
 
-vez = "heroi1"
-while True:
+#Aumentando vida
+#heroi1.aumentarxp()
+#heroi2.aumentarxp()
 
+vez = "heroi1"
+while vez == "heroi1" or vez == "heroi2":
     #Rodada do jogador 1
     while vez == "heroi1":
         print(f"\n\nRodada do Guerreiro {heroi1.nome}.")
@@ -68,8 +87,12 @@ while True:
         elif num == 3:
             heroi1.aumentarxp()
             break
-    vez = "heroi2"
-
+    if heroi1.vida < 1:
+        vez = "FIM"
+        print(f" {heroi1.nome} virou Pó... \n     FIM DE JOGO.")
+        break
+    else:
+        vez = "heroi2"
     #rodado do jogador 2
     while vez == "heroi2":
         print(f"\n\nRodada do Guerreiro {heroi2.nome}.")
@@ -85,4 +108,13 @@ while True:
         elif num == 3:
             heroi2.aumentarxp()
             break
-    vez = "heroi1"
+    if heroi1.vida < 1:
+        vez = "FIM"
+        print(f" {heroi1.nome} virou Pó... \n     FIM DE JOGO.")
+        break
+    if heroi1.vida < 2:
+        vez = "FIM"
+        print(f" {heroi2.nome} virou Pó... \n     FIM DE JOGO.")
+        break
+    else:
+        vez = "heroi1"
